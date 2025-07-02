@@ -36,6 +36,7 @@ console.log(getLongestUniqueSubstring(s))
 const string = "ADOBECODEBANC";
 const t = "ABC";
 
+// TODO: finish the getMinWindowSubstring algoritithm:
 const getMinWindowSubstring = (s, t) => {
     // validation of the string arguments: string and the target!
     if (typeof (s) !== 'string' || typeof (t) !== 'string') return 'Error!';
@@ -46,10 +47,57 @@ const getMinWindowSubstring = (s, t) => {
         need[char] = (need[char] || 0) + 1;
         console.log("need: ", need);
     }
+    let have = {};
+    let required = Object.keys(need).length;
+    let formed = 0;
 
-    
+    // init the left and right at 0;
+    let left = 0, right = 0;
+    let minLen = Infinity;
+    minStart = 0;
+
+    while (right < s.length) {
+        let char = s[right];
+        have[char] = (have[char] || 0) + 1;
+
+        // if the current char meets its need requirement, increament 'formed':
+        if (need[char] && have[char] === need[char]) {
+            formed++;
+        }
+        // try to shrink the window from the left as longs as its valid:
+        while (formed === required) {
+            // update the min window from the left as long as it is valid:
+            if (right - left + 1 < minLen) {
+                minLen = right - left + 1;
+                minStart = left;
+            }
+            let leftChar = s[left];
+            have[leftChar]--;
+            if (need[leftChar] && have[leftChar] < need[leftChar]) {
+                formed--;
+            }
+            left++;
+        }
+        right++;
+    }
+    return minLen === Infinity ? '' : s.slice(minStart, minStart + minLen);
 
 }
 
-console.log(getMinWindowSubstring(string, t))
+console.log(getMinWindowSubstring(string, t));
+
+//! Summary of the above Minimum Window Substring function:
+/*
+Summary: Minimum Window Substring (Sliding Window Technique)
+-----------------------------------------------------------
+- Build a map 'need' of required character counts from t.
+- Use two pointers (left and right) to define a sliding window over s.
+- Expand the window by moving right, updating counts in 'have'.
+- When all needed chars are matched (formed === required), 
+- try to shrink the window from the left to find the minimum length.
+- Update the minimum window each time a smaller valid window is found.
+- Return the smallest window substring found; return "" if none found.
+Time Complexity: O(|s| + |t|) due to one pass through s and building the need map.
+Space Complexity: O(|s| + |t|) for the maps.
+*/
 
