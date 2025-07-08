@@ -39,4 +39,37 @@ console.log(getSubarraySumToK(nums, k))
 // Input: nums = [1, -1, 5, -2, 3], k = 3
 // Output: 4
 // Explanation: The subarray [1, -1, 5, -2] sums to 3 and has length 4.
+const arrayNums = [1, -1, 5, -2, 3];
+const kTarget = 3;
 
+const maxSubArrayLen = (arr, k) => {
+    // strict validation of the array and the k target number:
+    if (!Array.isArray(arr) || arr.length <= 1 || !arr.every(item => typeof item === 'number')) return arr;
+    if (typeof (k) !== 'number') return k;
+
+    // init the initial vars:
+    let prefixSum = 0;
+    let maxLen = 0;
+    let hashMap = new Map();
+    //* handle subarrays starting at index 0 with .set(0, -1) assignment to Map() object:
+    hashMap.set(0, -1);
+
+    for (let i = 0; i < arr.length; i++) {
+        // assign the elements to prefixSum:
+        prefixSum += arr[i];
+
+        // if prefixSum - k in seen before, update the maxLen:
+        if (hashMap.has(prefixSum - k)) {
+            let prevIndex = hashMap.get(prefixSum - k);
+            let currLen = i - prevIndex;
+            maxLen = Math.max(maxLen, currLen)
+        }
+        // only store the first occurance of each prefixSum:
+        if (!hashMap.has(prefixSum)) {
+            hashMap.set(prefixSum, i);
+        }
+    }
+    return maxLen;
+}
+
+console.log(maxSubArrayLen(arrayNums, kTarget));
