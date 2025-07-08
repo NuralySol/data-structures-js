@@ -1,0 +1,42 @@
+
+//! Subarray Sum Equals K:
+// Given an array of integers nums and an integer k, return the total number of continuous subarrays whose sum equals k.
+// Input: nums = [1,2,3], k = 3
+// Output: 2
+// Explanation: [1,2] and [3] are valid.
+
+const nums = [1, 2, 3];
+const k = 3;
+
+const getSubarraySumToK = (arr, k) => {
+    // strict validation of the array object argument:
+    if (!Array.isArray(arr) || arr.length <= 1 || !arr.every(item => typeof item === 'number')) return 'Error! Invalid array argument!';
+    if (typeof (k) !== 'number') return 'Error! invalid integer value!';
+    
+    let count = 0;
+    let prefixSum = 0;
+    let seen = new Map()
+    seen.set(0, 1);
+
+    for (let num of arr) {
+        prefixSum += num;
+
+        if (seen.has(prefixSum - k)) {
+            count += seen.get(prefixSum - k);
+        }
+        //^ update the prefixSum in the Map global object:
+        seen.set(prefixSum, (seen.get(prefixSum) || 0) + 1)
+    }
+    return count;
+}
+
+console.log(getSubarraySumToK(nums, k))
+
+
+// Maximum Size Subarray Sum Equals k 
+// Given an integer array nums and an integer k, find the length of the longest subarray that sums to k.
+// If there isn’t one, return 0.
+// Input: nums = [1, -1, 5, -2, 3], k = 3
+// Output: 4
+// Explanation: The subarray [1, -1, 5, -2] sums to 3 and has length 4.
+

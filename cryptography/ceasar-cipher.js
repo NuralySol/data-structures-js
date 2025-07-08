@@ -144,3 +144,29 @@ console.log('Encrypted:', encrypted);
 // decryption:
 const decrypted = vigenere(encrypted, key, "dec");
 console.log('Decrypted:', decrypted);
+
+//! XOR cipher is a simple symmetric encryption method where plaintext is combined with a key using the bitwise XOR operation.
+
+const xorCipher = (text, key) => {
+    let result = '';
+    const keyLength = key.length;
+
+    for (let i = 0; i < text.length; i++) {
+        const charCodeText = text.charCodeAt(i);
+        const charCodeKey = key.charCodeAt(i % keyLength) // cycle through the key:
+        const xoredCharCode = charCodeText ^ charCodeKey;
+        result += String.fromCharCode(xoredCharCode);
+    }
+    return result;
+}
+
+const textForXOR = 'Hello World';
+const encryptionKey = 'secret';
+
+// encrypt the text:
+const cipherTextXOR = xorCipher(textForXOR, encryptionKey);
+console.log('ciphered text: ', cipherTextXOR);
+
+// decrypt the text:
+const decryptedXOR = xorCipher(cipherTextXOR, encryptionKey);
+console.log('decrypted text: ', decryptedXOR);
