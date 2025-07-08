@@ -73,3 +73,19 @@ const maxSubArrayLen = (arr, k) => {
 }
 
 console.log(maxSubArrayLen(arrayNums, kTarget));
+
+//! Given an integer array nums of length n, find the subarray (contiguous elements) whose sum is closest to zero.
+// Return the indices [start, end] (inclusive) of such a subarray. If there are multiple answers, return any one of them.
+// Input: nums = [1, 2, -3, 4, 5]
+// Output: [0, 2]
+// The sum of nums[0:2] (1 + 2 + -3) = 0, which is exactly zero.
+
+const nums2 = [1, 2, -3, 4, 5];
+
+const getSumClosestToZero = (arr) => {
+    // strict validation of the array object argument:
+    if (!Array.isArray(arr) || arr.length <= 1 || !arr.every(item => typeof item === 'number')) return arr;
+    
+}
+
+console.log(getSumClosestToZero(nums2))
