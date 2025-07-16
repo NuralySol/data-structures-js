@@ -85,7 +85,45 @@ const nums2 = [1, 2, -3, 4, 5];
 const getSumClosestToZero = (arr) => {
     // strict validation of the array object argument:
     if (!Array.isArray(arr) || arr.length <= 1 || !arr.every(item => typeof item === 'number')) return arr;
+    let n = arr.length;
+    console.log('n length: ', n);
     
+    //* init the prefix sum as an object of sum: 0 and idx: -1 count:
+    let prefixSum = [{ sum: 0, idx: -1 }];
+    let sum = 0;
+
+    // loop the argument array:
+    for (let i = 0; i < n; i++) {
+        // log the results to see if the array is looped:
+        console.log(arr[i]);
+        // store all of the elements of the argument array in sum:
+        sum += arr[i];
+        prefixSum.push({ sum: sum, idx: i });
+    }
+
+    // sort the prefix sum by value:
+    prefixSum.sort((a, b) => a.sum - b.sum);
+
+    let minDiff = Infinity;
+    let result = [0, 0];
+
+    // compare the adjacent pairs in the sorted prefixSums:
+    for (let i = 1; i < prefixSum.length; i++) {
+        let diff = Math.abs(prefixSum[i].sum - prefixSum[i - 1].sum);
+        if (diff < minDiff) {
+            minDiff = diff;
+            // get the original indices:
+            let idx1 = prefixSum[i].idx;
+            let idx2 = prefixSum[i - 1].idx;
+
+            //* the subarray is from min (idx1, idx2) + 1 to max(idx1, idx2):
+            let left = Math.min(idx1, idx2) + 1;
+            let right = Math.max(idx1, idx2);
+            // reassign left and right of the Math.min and Math.max to the result array:
+            result = [left, right];
+        }
+    }
+    return result;
 }
 
-console.log(getSumClosestToZero(nums2))
+console.log(getSumClosestToZero(nums2));
