@@ -127,3 +127,91 @@ const getSumClosestToZero = (arr) => {
 }
 
 console.log(getSumClosestToZero(nums2));
+
+//! Longest consecutive sequence:
+// nums = [100, 4, 200, 1, 3, 2]
+// Output: 4
+// The longest consecutive sequence is [1, 2, 3, 4]. Use a hashSet: O(n) complexity!
+
+const nums1 = [100, 4, 200, 1, 3, 2];
+
+const getLongestConSequence = (arr) => {
+    // strict validation of the array argument:
+    if (!Array.isArray(arr) || arr.length <= 1 || !arr.every(item => typeof item === 'number')) return arr;
+
+    // feed in the array argument into the set:
+    const set = new Set(arr);
+    let maxLen = 0;
+
+    for (let num of set) {
+        // Only try to build the sequence Starts:
+        if (!set.has(num - 1)) {
+            let currentNum = num;
+            let currentLen = 1;
+
+            while (set.has(currentNum + 1)) {
+                currentNum += 1;
+                currentLen += 1;
+            }
+            maxLen = Math.max(maxLen, currentLen);
+        }
+    }
+    return maxLen;
+}
+
+console.log(getLongestConSequence(nums1));
+
+//! Binary Tree Maximum Path Sum:
+//* Maximum path 15 + 20 + 7 = 42:
+    //   -10
+    //   /  \
+    //  9   20
+    //     /  \
+    //    15   7
+    
+
+//! Needs an OOP starter code for the tree structure:
+class TreeNode {
+    constructor(val, left = null, right = null) {
+        this.val = val;
+        this.left = left;
+        this.right = right
+    }
+}
+
+//! construct a tree using the class of TreeNode, an instance of the tree(think of the class as an assembly line producing insantiated products) i.e. blueprint of sorts:
+const root = new TreeNode(-10,
+    new TreeNode(9),
+    new TreeNode(20, new TreeNode(15), new TreeNode(7))
+)
+
+// logging the tree node of and the structure of it: please reference the above!
+console.log("tree: ", root);
+
+//* function to find the Maximum Path Sum of this instance of a tree structure, expected result is: 15 + 20 + 7 = 42!
+const getMaxPathSum = (root) => {
+    // initiate a maxSum of -Infinity! anything compared to it will be greater value boolean truth:
+    let maxSum = -Infinity;
+
+    function helper(node) {
+        if (!node) return 0;
+
+        // only consider positive paths in the tree structure instance:
+        const left = Math.max(helper(node.left), 0);
+        const right = Math.max(helper(node.right), 0);
+
+        // path that splits at this node:
+        const splitSum = node.val + left + right;
+        maxSum = Math.max(maxSum, splitSum);
+
+        // get the best single path for the parent's recursion:
+        return node.val + Math.max(left, right);
+    }
+    // call the helper function on the 'root' argument:
+    helper(root);
+    // and return the maxSum so far:
+    return maxSum;
+}
+
+console.log(getMaxPathSum(root))
+
